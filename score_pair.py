@@ -152,10 +152,16 @@ def score_pair(
     methods = []
 
     for item in plan:
-        value_a = str(a.get(item.attribute, "")).strip()
-        value_b = str(b.get(item.attribute, "")).strip()
+        raw_a = a.get(item.attribute)
+        raw_b = b.get(item.attribute)
 
         # Missing values provide no evidence and are skipped.
+        if raw_a is None or raw_b is None:
+            continue
+
+        value_a = str(raw_a).strip()
+        value_b = str(raw_b).strip()
+
         if not value_a or not value_b:
             continue
 
