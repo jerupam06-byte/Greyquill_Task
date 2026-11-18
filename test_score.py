@@ -1,5 +1,7 @@
-from score_pair import score_pair, PLAN
 
+from score_pair import score_pair, PLAN, FieldComparison
+
+# Test 1: Similar customer records
 person1 = {
     "name": "Rahul Sharma",
     "email": "rahul@gmail.com",
@@ -20,11 +22,17 @@ person2 = {
 
 result = score_pair(person1, person2, PLAN)
 
-print("Confidence:", result.confidence)
-print("Algorithm:", result.algorithm)
-print("Field scores:", result.field_scores)
-print("\n--- Missing Value Test ---")
+assert 0.0 <= result.confidence <= 1.0
+assert result.field_scores["email"] == 1.0
+assert result.field_scores["phone"] == 1.0
+assert result.field_scores["date_of_birth"] == 1.0
+assert result.field_scores["pin_code"] == 1.0
+assert result.field_scores["city"] == 1.0
 
+print("Test 1 passed: Similar records")
+
+
+# Test 2: Missing values
 person3 = {
     "name": "Rahul Sharma",
     "email": "",
@@ -45,6 +53,26 @@ person4 = {
 
 missing_result = score_pair(person3, person4, PLAN)
 
-print("Confidence:", missing_result.confidence)
-print("Algorithm:", missing_result.algorithm)
-print("Field scores:", missing_result.field_scores)
+assert missing_result.confidence == 1.0
+assert "email" not in missing_result.field_scores
+assert "phone" not in missing_result.field_scores
+assert "date_of_birth" not in missing_result.field_scores
+
+print("Test 2 passed: Missing values are skipped")
+
+
+# Test 3: Nothing to compare
+empty_plan = [
+    FieldComparison("email", "edit_distance", 0.20),
+    FieldComparison("phone", "normalized_phone", 0.20),
+]
+
+empty_result = score_pair(person3, person4, empty_plan)
+
+assert empty_result.confidence == 0.0
+assert empty_result.field_scores == {}
+
+print("Test 3 passed: No comparable fields")
+
+
+print("\nAll tests passed successfully!")

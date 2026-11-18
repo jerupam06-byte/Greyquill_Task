@@ -13,10 +13,11 @@ Each field is compared separately and assigned a similarity score between 0 and 
 The final confidence score is calculated using the weighted average of the comparable fields. Missing or blank values are ignored so that they do not negatively affect the result.
 
 The implementation supports:
-- Exact matching for fields such as email, city, and PIN code.
+- Exact matching for city and PIN code.
+- Email similarity using edit distance.
 - Phone number normalization to handle differences in formatting.
 - Date comparison across different date formats.
-- Name similarity using string similarity, edit distance, and word-order handling.
+- Name similarity using string similarity and word-order handling.
 
 The final confidence score ranges from 0 to 1, where a higher score indicates a stronger potential match.
 
@@ -54,3 +55,7 @@ If no comparable fields are available, the confidence score is 0.0.
 - Similar names do not necessarily mean the records belong to the same person.
 - The name comparison uses similarity heuristics and edit distance, not a dedicated phonetic matching library.
 - Matching confidence is an indication of similarity, not proof of identity.
+
+## AI Usage
+
+ChatGPT was used to help understand the assignment, plan the implementation, review code, troubleshoot issues, and improve documentation. The implementation was tested locally using the provided dataset and test scripts.
